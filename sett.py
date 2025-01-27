@@ -1,8 +1,8 @@
 token = 'bancoazteca'
 
-whatsapp_token = 'EAAXk4bntEBgBO6QbtwVhQURd3U95ZANReraZBSlhZAtFNIZBbt0wpiDsJsd070WMnH4YI1JHmLSuA1aCNocwe65UkapsCzYDPY0qK3kPCRNeKhqL4IKyM9uQ1Hbt9NDqkT03vmXqW64Y3YhcZBtZA9ZAP2InQob5H9qpeGasN5JaItzVks91H9ZAbgSFFaK8e6ZArFoj73oD7VdiSBz3BXYKkVdKeQtH7DB6UqjqT'
+whatsapp_token = 'EAAQHS5WfYQMBOyt2BnvRUrqQSi2nfenhYiHa6vu5H07TU0BC1eNFKAWqR9wx5fRxa1t5C5tM14YRt5A8ZAF93iHfsOFQqJd4oGahvp0KNEJ0HgXZBVZBQlpHKh1mTxYcqYPZAfsWRoqVxoHkaDyozI4aBWieU5sEsGsTWJkjCX1lRoNNOgG3Tt4SB7AMSRWTmDcBBN155ylUgpAiIhsR0C5ZBmNoZD'
 
-whatsapp_url = 'https://graph.facebook.com/v21.0/510991932107308/messages'
+whatsapp_url = 'https://graph.facebook.com/v21.0/516505054885503/messages'
 
 stickers = {
     "poyo_feliz": 984778742532668,
