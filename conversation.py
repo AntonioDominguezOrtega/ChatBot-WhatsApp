@@ -19,6 +19,17 @@ firebase_admin.initialize_app(cred)
 # Conexión a Firestore
 db = firestore.client()
 
+def obtener_siguiente_turno():
+    citas_ref = db.collection("Citas").order_by("turno", direction="DESCENDING").limit(1)
+    docs = citas_ref.stream()
+
+    for doc in docs:
+        ultimo_turno = doc.get("turno")  # Obtiene el último número de turno
+        return ultimo_turno + 1  # Retorna el siguiente turno
+
+    return 1  # Si no hay turnos en la base de datos, empieza en 1
+    
+
 # Función para guardar citas en Firestore
 def guardar_cita_en_firestore(numero, sucursal, dia, hora, turno, tipo, status="En espera", fecha_hora_agendada=None, movimiento=None):
     try:
@@ -101,8 +112,8 @@ def administrar_chatbot(text, number, messageId, name):
         time.sleep(3)
 
         banco = "Banco Azteca"
-        turno = f"T-{random.randint(100, 999)}"
-        mensaje_turno = f"{banco}\n{sucursalSal}\nTu turno es: {turno}"
+        turno = obtener_siguiente_turno()  # Obtener el último turno y sumarle 1
+        mensaje_turno = f"{banco}\n{sucursalSal}\nTu turno es: T-{turno}"
 
         turno_message = text_Message(number, mensaje_turno)
         enviar_Mensaje_whatsapp(turno_message)
@@ -111,13 +122,13 @@ def administrar_chatbot(text, number, messageId, name):
         movimientoSel = text  # Guardar el movimiento seleccionado
         usuarios_data[number]['movimiento'] = movimientoSel  # Actualizar el diccionario global
 
-        # Guardar los datos de la cita en Firestore con el movimiento
+        # Guardar los datos de la cita en Firestore con el movimiento y turno progresivo
         guardar_cita_en_firestore(
             numero=number,
             sucursal=sucursalSal,
             dia=diaSal,
             hora=horaSal,
-            turno=turno,
+            turno=turno,  # Ahora es un número progresivo
             tipo="turno",
             status="En espera",
             fecha_hora_agendada=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -125,7 +136,7 @@ def administrar_chatbot(text, number, messageId, name):
         )
 
         data = text_Message(number, "Tu turno se asignó correctamente, te esperamos en sucursal 😃")
-        list.append(data)
+        return data
 
     elif "agendar citas" in text:
         body = "¿Qué movimiento vas a realizar? 🤔"
@@ -204,6 +215,9 @@ def administrar_chatbot(text, number, messageId, name):
     else:
         data = text_Message(number, "Lo siento, no entendí lo que dijiste. ¿Quieres que te ayude con alguna de estas opciones?")
         list.append(data)
+
+    for item in list:
+        enviar_Mensaje_whatsapp(item)
 
     for item in list:
         enviar_Mensaje_whatsapp(item)
